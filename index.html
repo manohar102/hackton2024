@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flaky Test Case Simulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <header class="bg-blue-600 text-white py-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Flaky Test Case Simulator</h1>
+            <nav>
+                <ul class="flex space-x-4">
+                    <li><a href="#dynamic-content" class="hover:underline">Dynamic Content</a></li>
+                    <li><a href="#resolution" class="hover:underline">Screen Resolution</a></li>
+                    <li><a href="#shadow-dom" class="hover:underline">Shadow DOM</a></li>
+                    <li><a href="#overlap" class="hover:underline">Overlapping Elements</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-6">
+        <!-- Dynamic Content Load -->
+        <section id="dynamic-content" class="mb-8">
+            <h2 class="text-xl font-semibold mb-4">Dynamic Content Not Loaded</h2>
+            <p class="text-gray-700 mb-2">Simulates delayed loading of dynamic content, often causing timeouts.</p>
+            <button id="load-dynamic-content" class="bg-blue-500 text-white px-4 py-2 rounded">Load Content</button>
+            <div id="dynamic-content-area" class="mt-4 text-gray-700 hidden">Dynamic Content Loaded!</div>
+        </section>
+
+        <!-- Screen Resolution Dependence -->
+        <section id="resolution" class="mb-8">
+            <h2 class="text-xl font-semibold mb-4">Screen Resolution Dependent</h2>
+            <p class="text-gray-700 mb-2">Some elements are only visible on certain screen sizes.</p>
+            <div class="text-gray-700 hidden sm:block">Visible on larger screens (>=640px).</div>
+            <div class="text-gray-700 block sm:hidden">Visible on smaller screens (<640px).</div>
+        </section>
+
+        <!-- Shadow DOM Example -->
+        <section id="shadow-dom" class="mb-8">
+            <h2 class="text-xl font-semibold mb-4">Shadow DOM Example</h2>
+            <p class="text-gray-700 mb-2">Shadow DOM content may not always be accessible.</p>
+            <button id="toggle-shadow-dom" class="bg-purple-500 text-white px-4 py-2 rounded">Toggle Shadow DOM</button>
+            <div id="shadow-host" class="mt-4 text-gray-700"></div>
+        </section>
+
+        <!-- Overlapping Elements -->
+        <section id="overlap" class="mb-8">
+            <h2 class="text-xl font-semibold mb-4">Overlapping Elements</h2>
+            <p class="text-gray-700 mb-2">An element might be blocked by another overlapping element.</p>
+            <div class="relative w-64 h-16 border border-gray-300">
+                <button id="overlap-button" class="absolute inset-0 w-full h-full bg-blue-300">Action Button</button>
+                <div class="absolute inset-0 bg-red-500 bg-opacity-75">I am overlapping</div>
+            </div>
+        </section>
+
+        <!-- Dynamic Attributes -->
+        <section id="dynamic-attributes" class="mb-8">
+            <h2 class="text-xl font-semibold mb-4">Dynamic Attributes</h2>
+            <p class="text-gray-700 mb-2">Attributes of elements may change during runtime, causing locator mismatches.</p>
+            <button id="change-attributes" class="bg-green-500 text-white px-4 py-2 rounded">Change Attributes</button>
+            <div id="dynamic-attribute" class="mt-4 text-gray-700" data-status="initial">Initial State</div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-4">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 Flaky Test Case Simulator. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Dynamic Content Load
+        document.getElementById('load-dynamic-content').addEventListener('click', () => {
+            setTimeout(() => {
+                document.getElementById('dynamic-content-area').classList.remove('hidden');
+            }, 2000);
+        });
+
+        // Shadow DOM
+        const shadowHost = document.getElementById('shadow-host');
+        let shadowRoot = null;
+        document.getElementById('toggle-shadow-dom').addEventListener('click', () => {
+            if (shadowRoot) {
+                shadowRoot.innerHTML = '';
+                shadowRoot = null;
+            } else {
+                shadowRoot = shadowHost.attachShadow({ mode: 'open' });
+                shadowRoot.innerHTML = '<div style="color: purple;">Inside Shadow DOM</div>';
+            }
+        });
+
+        // Dynamic Attributes
+        document.getElementById('change-attributes').addEventListener('click', () => {
+            const element = document.getElementById('dynamic-attribute');
+            element.setAttribute('data-status', 'updated');
+            element.textContent = 'Updated State';
+        });
+    </script>
+</body>
+</html>
